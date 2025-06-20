@@ -58,7 +58,7 @@ class LoanViewSet(viewsets.ModelViewSet):
         loan_id = request.data.get('loan_id')
         new_due_date = request.data.get('new_due_date')
         try:
-            new_due_date = datetime.strptime(request.data.get('new_due_date'),"%Y-%m-%d").date()
+            new_due_date = int(request.data.get('new_due_date'))
         except:
             Response({'error': 'Invalid date format.'}, status=status.HTTP_400_BAD_REQUEST)
         
