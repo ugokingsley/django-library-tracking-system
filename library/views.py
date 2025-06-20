@@ -1,3 +1,4 @@
+from datetime import timedelta, date
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Author, Book, Member, Loan
@@ -69,6 +70,6 @@ class LoanViewSet(viewsets.ModelViewSet):
         except Loan.DoesNotExist:
             return Response({'error': 'Active loan does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        loan.due_date = loan.due_date + timedelta(days=new_due_date)
+        loan.due_date += timedelta(days=new_due_date)
         loan.save()
         return Response({'status': 'Book returned successfully.'}, status=status.HTTP_200_OK)
