@@ -35,7 +35,7 @@ class BookViewSet(viewsets.ModelViewSet):
         book = self.get_object()
         member_id = request.data.get('member_id')
         try:
-            loan = Loan.objects.get(book=book, member__id=member_id, is_returned=False)
+            loan = Loan.objects.get(book=book,is_returned=False)
         except Loan.DoesNotExist:
             return Response({'error': 'Active loan does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
         loan.is_returned = True
@@ -52,3 +52,21 @@ class MemberViewSet(viewsets.ModelViewSet):
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
+
+    @action(detail=True, methods=['post'])
+    def extend_due_date(self, request, pk=None):
+        loan_id = request.data.get('loan_id')
+        new_due_date = request.data.get('new_due_date')
+        try:
+            new_due_date = datetime.strptime(request.data.get('new_due_date'),"%Y-%m-%d").date()
+        except:
+            Response({'error': 'Invalid date format.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            loan = Loan.objects.get(id=loan_id, member__id=member_id, is_returned=False)
+        except Loan.DoesNotExist:
+            return Response({'error': 'Active loan does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        loan.due_date = new_due_date
+        loan.save()
+        return Response({'status': 'Book returned successfully.'}, status=status.HTTP_200_OK)
