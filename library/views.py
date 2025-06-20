@@ -65,7 +65,7 @@ class LoanViewSet(viewsets.ModelViewSet):
             Response({'error': 'Invalid date format.'}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            loan = Loan.objects.get(id=loan_id, member__id=member_id, is_returned=False)
+            loan = Loan.objects.get(id=loan_id, is_returned=False)
         except Loan.DoesNotExist:
             return Response({'error': 'Active loan does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
         
