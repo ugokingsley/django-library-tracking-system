@@ -59,6 +59,8 @@ class LoanViewSet(viewsets.ModelViewSet):
         new_due_date = request.data.get('new_due_date')
         try:
             new_due_date = int(request.data.get('new_due_date'))
+            if new_due_date < 1:
+                Response({'error': 'Invalid date format.'}, status=status.HTTP_400_BAD_REQUEST)
         except:
             Response({'error': 'Invalid date format.'}, status=status.HTTP_400_BAD_REQUEST)
         
