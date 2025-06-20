@@ -23,7 +23,7 @@ def send_loan_notification(loan_id):
 @shared_task
 def check_overdue_loans():
     today = date.today()
-    loans_due = Loan.objects.filter(return_date=today, is_returned=False)
+    loans_due = Loan.objects.filter(due_date=today, is_returned=False)
 
     for loan in loans_due:
         member_email = loan.member.user.email
